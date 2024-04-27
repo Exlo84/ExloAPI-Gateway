@@ -1,0 +1,1 @@
+ALTER TABLE llm_entries ADD COLUMN isActive BOOLEAN NOT NULL DEFAULT false;

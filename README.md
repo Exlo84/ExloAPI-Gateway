@@ -35,4 +35,4 @@ The application architecture is divided into a frontend and backend. The fronten
 
 ### License
 
-Copyright (c) 2024.
+Copyright (c) Exlo 2024.

@@ -1,0 +1,16 @@
+/node_modules/
+*.env
+
+# Logs
+/logs/
+/backend/logs/
+/frontend/logs/
+
+# Database files
+/database/*.db
+/backend/database/*.db
+/frontend/database/*.db
+
+# Node modules directories
+/frontend/node_modules/
+/backend/node_modules/
