@@ -13,6 +13,7 @@
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
+    "vue-router": "^4.3.2",
     "winston": "^3.13.0"
   },
   "scripts": {

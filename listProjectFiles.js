@@ -1,33 +1,46 @@
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
 
-// Function to read .gitignore and convert its patterns to glob format
-const readGitignore = () => {
-  return fs.readFileSync('./.gitignore', 'utf8').split('\n').filter(pattern => pattern && !pattern.startsWith('#')).map(pattern => {
-    // Convert to glob pattern
-    const globPattern = pattern.endsWith('/') ? `${pattern}**/*` : pattern;
-    return globPattern;
+console.log('Starting to list project files...');
+
+// Function to recursively list all files and directories
+const listFilesRecursively = (dirPath, arrayOfFiles) => {
+  const files = fs.readdirSync(dirPath);
+
+  arrayOfFiles = arrayOfFiles || [];
+
+  files.forEach(function(file) {
+    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+      arrayOfFiles = listFilesRecursively(dirPath + "/" + file, arrayOfFiles);
+    } else {
+      arrayOfFiles.push(path.join(dirPath, "/", file));
+    }
   });
+
+  return arrayOfFiles;
 };
 
-// Function to list all files excluding those matched by .gitignore patterns
-const listFiles = async (gitignorePatterns) => {
-  glob("**/*", { ignore: gitignorePatterns, nodir: true }, (err, files) => {
-    if (err) {
-      console.error("Error listing files:", err);
+// Function to write the list of files to projectFilesList.txt
+const writeToFile = (files) => {
+  const outputPath = path.resolve('./projectFilesList.txt');
+  fs.writeFile(outputPath, files.join('\n'), 'utf8', (error) => {
+    if (error) {
+      console.error("Error writing to projectFilesList.txt:", error);
       return;
     }
-    // Write to file
-    fs.writeFileSync('./projectFilesList.txt', files.join('\n'), 'utf8');
-    console.log('Project files listed successfully in projectFilesList.txt');
+    console.log(`Project files listed successfully in projectFilesList.txt. Total files listed: ${files.length}`);
   });
 };
 
 // Main function
-const main = async () => {
-  const gitignorePatterns = readGitignore();
-  await listFiles(gitignorePatterns);
+const main = () => {
+  try {
+    const projectRoot = path.resolve('.');
+    const filesList = listFilesRecursively(projectRoot);
+    writeToFile(filesList);
+  } catch (error) {
+    console.error("An error occurred during the listing process:", error);
+  }
 };
 
 main();
